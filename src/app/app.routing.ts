@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, } from '@angular/common';
-import { BrowserModule  } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
@@ -12,7 +12,7 @@ import { environment } from './../environments/environment';
 import { Authority } from 'app/shared/constants/authority.constants';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 
-const routes: Routes =[
+const routes: Routes = [
   {
     path: '',
     redirectTo: 'dashboard',
@@ -47,6 +47,14 @@ const routes: Routes =[
     loadChildren: () => import('./demo/demo.module').then(m => m.DemoModule)
   },
   {
+    path: 'app-management',
+    data: {
+      authorities: [Authority.ADMIN]
+    },
+    canActivate: [UserRouteAccessService],
+    loadChildren: () => import('./management/management.module').then(m => m.ManagementModule)
+  },
+  {
     path: '',
     component: AuthLayoutComponent,
     children: [
@@ -63,7 +71,7 @@ const routes: Routes =[
   imports: [
     CommonModule,
     BrowserModule,
-    RouterModule.forRoot(routes,{
+    RouterModule.forRoot(routes, {
       useHash: true,
       enableTracing: !environment.production
     })
