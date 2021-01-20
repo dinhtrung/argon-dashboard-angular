@@ -5,6 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+// + error handler
+import { ErrorComponent } from './layouts/error/error.component';
+import { errorRoute } from './layouts/error/error.route';
+import { environment } from './../environments/environment';
+import { Authority } from 'app/shared/constants/authority.constants';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 
 const routes: Routes =[
   {
@@ -20,7 +26,17 @@ const routes: Routes =[
         loadChildren: './layouts/admin-layout/admin-layout.module#AdminLayoutModule'
       }
     ]
-  }, {
+  },
+  {
+    path: 'data',
+    component: AdminLayoutComponent,
+    data: {
+      authorities: [Authority.USER],
+    },
+    canActivate: [UserRouteAccessService],
+    loadChildren: () => import('./data/data.module').then(m => m.DataModule)
+  },
+  {
     path: '',
     component: AuthLayoutComponent,
     children: [
@@ -29,10 +45,8 @@ const routes: Routes =[
         loadChildren: './layouts/auth-layout/auth-layout.module#AuthLayoutModule'
       }
     ]
-  }, {
-    path: '**',
-    redirectTo: 'dashboard'
-  }
+  },
+  ...errorRoute
 ];
 
 @NgModule({
@@ -40,7 +54,8 @@ const routes: Routes =[
     CommonModule,
     BrowserModule,
     RouterModule.forRoot(routes,{
-      useHash: true
+      useHash: true,
+      enableTracing: !environment.production
     })
   ],
   exports: [

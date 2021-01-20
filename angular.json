@@ -22,7 +22,12 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "allowedCommonJsDependencies": ["chart.js"],
+            "allowedCommonJsDependencies": [
+              "js-yaml",
+              "file-saver",
+              "lodash",
+              "chart.js"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets"
