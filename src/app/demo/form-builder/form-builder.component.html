@@ -1,0 +1,81 @@
+<div class="row justify-content-center" *ngIf="contentType">
+    <div class="col-6">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-content-type-heading">Form Builder</h2>
+            <div>
+                <p class="card-header border">
+                    <button type="button" (click)="addField()" class="btn btn-sm btn-success float-right">
+                        <span class="d-none d-md-inline">Add Field</span>
+                    </button>
+                    <span jhiTranslate="gatewayApp.contentType.fields">Fields</span>
+                </p>
+
+                <ngb-accordion activeIds="ngb-panel-0" [closeOthers]="true">
+                    <ngb-panel *ngFor="let p of contentType.fields; let j=index" [title]="'Field #' + (j + 1) + ' ' + _.get(p, 'key')" [id]="'ngb-panel-' + j">
+                        <ng-template ngbPanelContent>
+                            <div class="form-group">
+                                <label class="form-control-label" for="field_fields_{{j}}_type">Type</label>
+                                <select class="form-control" name="fields_{{j}}_type" id="field_fields_{{j}}_type" [(ngModel)]="p.type">
+                                    <option *ngFor="let o of contentTypeService.fieldTypes | keyvalue" [value]="o.key">
+                                        {{ o.key }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label class="form-control-label" for="field_fields_{{j}}_key">Key</label>
+                                <input type="text" class="form-control" name="fields_{{j}}_key" id="field_fields_{{j}}_key" [(ngModel)]="p.key">
+                            </div>
+                            <div *ngIf="p.type">
+                                <h6>Template Options</h6>
+                                <formly-form [(model)]="p.templateOptions" [fields]="_.get(contentTypeService.fieldTypes, p.type)"></formly-form>
+                            </div>
+
+                            <div class="btn-group">
+                                <button class="btn btn-success btn-sm" type="button">
+                                    <span class="d-none d-md-inline">Display
+                                        in Table View</span>
+                                </button>
+                                <button class="btn btn-danger btn-sm" (click)="removeField(j)" [disabled]="contentType.fields.length < 2">
+                                    <span class="d-none d-md-inline">Remove</span>
+                                </button>
+                            </div>
+                        </ng-template>
+                    </ngb-panel>
+                </ngb-accordion>
+
+                <hr />
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_datatable">Datatable</label>
+                    <textarea class="form-control" name="datatable" id="field_datatable" [(ngModel)]="contentType.datatable"></textarea>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-primary" (click)="renderPreviewForm()">
+                    <span>Preview</span>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="col-6">
+        <h3>Form Preview</h3>
+        <div class="card">
+            <form [formGroup]="previewForm" (ngSubmit)="submit()">
+                <div class="card-body">
+                    <formly-form [model]="entry" [fields]="previewFormFields"></formly-form>
+                </div>
+                <div class="card-footer">
+                    <button type="button" name="button" class="btn btn-primary">Save</button>
+                    <button type="reset" name="button" class="btn btn-secondary" (click)="entry = {}">Reset</button>
+                </div>
+            </form>
+        </div>
+        <div class="form-group">
+          <textarea class="form-control" name="contentTypeJson" [(ngModel)]="contentType.fieldJson" id="contentTypeFields" rows="5" cols="80"></textarea>
+          <button type="button" name="button" class="btn btn-warning" (click)="convertJson()">Load JSON into Form</button>
+        </div>
+        <div class="form-group">
+          <textarea class="form-control" name="contentTypeYaml" [(ngModel)]="contentType.yaml" id="contentTypeFields" rows="5" cols="80"></textarea>
+          <button type="button" name="button" class="btn btn-danger" (click)="convertYaml()">Load YAML into Form</button>
+        </div>
+    </div>
+</div>

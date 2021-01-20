@@ -1,0 +1,25 @@
+<div class="card">
+    <div class="card-header text-info">INI to Form Conversion</div>
+    <div class="card-body">
+        <div class="row form">
+            <div class="col-6 form-group">
+                <label for="modelJson">INI</label>
+                <textarea class="form-control" name="iniTemplate" [(ngModel)]="iniTemplate" id="iniTemplate" rows="8" cols="80"></textarea>
+                <p class="form-help text-muted">Your INI</p>
+            </div>
+            <div class="col-6 form-group">
+              <div *ngIf="fields">
+                <form [formGroup]="form" (ngSubmit)="submit()">
+                  <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+                  <div style="padding-top: 20px">
+                    <button type="submit" class="btn btn-primary submit-button">Submit</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="button" name="button" class="btn btn-success" (click)="renderTemplate()">INI to Form</button>
+    </div>
+</div>

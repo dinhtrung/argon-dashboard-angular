@@ -37,6 +37,16 @@ const routes: Routes =[
     loadChildren: () => import('./data/data.module').then(m => m.DataModule)
   },
   {
+    path: 'docs',
+    // component: AuthLayoutComponent,
+    loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule)
+  },
+  {
+    path: 'demo',
+    // component: AuthLayoutComponent,
+    loadChildren: () => import('./demo/demo.module').then(m => m.DemoModule)
+  },
+  {
     path: '',
     component: AuthLayoutComponent,
     children: [
