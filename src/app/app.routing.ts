@@ -43,7 +43,7 @@ const routes: Routes =[
   },
   {
     path: 'demo',
-    // component: AuthLayoutComponent,
+    component: AdminLayoutComponent,
     loadChildren: () => import('./demo/demo.module').then(m => m.DemoModule)
   },
   {
